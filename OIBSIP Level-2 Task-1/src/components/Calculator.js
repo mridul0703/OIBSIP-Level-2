@@ -2,21 +2,20 @@ import React, { useState } from "react";
 import Display from "./Display";
 import Buttons from "./Buttons";
 import "./styles/Calculator.css";
-import { evaluate, round } from "mathjs";
 
 function Calculator() {
   const [input, setInput] = useState("");
   const [answer, setAnswer] = useState("");
 
-  //input
+  // Input handler
   const inputHandler = (event) => {
     if (answer === "Invalid Input!!") return;
     let val = event.target.innerText;
 
-    if (val === "x2") val = "^2";
-    else if (val === "x3") val = "^3";
-    else if (val === "3√") val = "^(1÷3)";
-    else if (val === "log") val = "log(";
+    if (val === "x2") val = "**2";
+    else if (val === "x3") val = "**3";
+    else if (val === "3√") val = "**(1/3)";
+    else if (val === "log") val = "Math.log10(";
 
     let str = input + val;
     if (str.length > 14) return;
@@ -25,16 +24,15 @@ function Calculator() {
       setInput(answer + val);
       setAnswer("");
     } else setInput(str);
-    // setInput(str);
   };
 
-  //Clear screen
+  // Clear screen
   const clearInput = () => {
     setInput("");
     setAnswer("");
   };
 
-  // check brackets are balanced or not
+  // Check brackets are balanced
   const checkBracketBalanced = (expr) => {
     let stack = [];
     for (let i = 0; i < expr.length; i++) {
@@ -52,16 +50,21 @@ function Calculator() {
     return stack.length === 0;
   };
 
-  // calculate final answer
+  // Evaluate expression safely
+  const safeEval = (expr) => {
+    return Function('"use strict"; return (' + expr + ')')();
+  };
+
+  // Calculate final answer
   const calculateAns = () => {
     if (input === "") return;
     let result = 0;
     let finalexpression = input;
-    //  finalexpression = input.replaceAll("^", "**");  //for eval()
+
     finalexpression = finalexpression.replaceAll("x", "*");
     finalexpression = finalexpression.replaceAll("÷", "/");
 
-    // evaluate square root
+    // Evaluate square root
     let noSqrt = input.match(/√[0-9]+/gi);
 
     if (noSqrt !== null) {
@@ -69,29 +72,29 @@ function Calculator() {
       for (let i = 0; i < noSqrt.length; i++) {
         evalSqrt = evalSqrt.replace(
           noSqrt[i],
-          `sqrt(${noSqrt[i].substring(1)})`
+          `Math.sqrt(${noSqrt[i].substring(1)})`
         );
       }
       finalexpression = evalSqrt;
     }
 
     try {
-      // check brackets are balanced or not
+      // Check if brackets are balanced
       if (!checkBracketBalanced(finalexpression)) {
         const errorMessage = { message: "Brackets are not balanced!" };
         throw errorMessage;
       }
-      result = evaluate(finalexpression); //mathjs
+      result = safeEval(finalexpression);
     } catch (error) {
       result =
         error.message === "Brackets are not balanced!"
           ? "Brackets are not balanced!"
-          : "Invalid Input!!"; //error.message;
+          : "Invalid Input!!";
     }
-    isNaN(result) ? setAnswer(result) : setAnswer(round(result, 3));
+    isNaN(result) ? setAnswer(result) : setAnswer(Math.round(result * 1000) / 1000);
   };
 
-  // remove last character
+  // Remove last character
   const backspace = () => {
     if (answer !== "") {
       setInput(answer.toString().slice(0, -1));
@@ -99,9 +102,8 @@ function Calculator() {
     } else setInput((prev) => prev.slice(0, -1));
   };
 
-  // change prefix of expression
+  // Change prefix of expression
   const changePlusMinus = () => {
-    //need to change for answer
     if (answer === "Invalid Input!!") return;
     else if (answer !== "") {
       let ans = answer.toString();
