@@ -6,7 +6,7 @@
 
 - Task 1 = React Calculator 
   - Github Repository Code - [Code](https://github.com/mridul0703/OIBSIP-Level-2/tree/main/OIBSIP%20Level-2%20Task-1)
-  - Live link - [Link]()
+  - Live link - [Link](https://oibsip-level-2.vercel.app/)
 
 - Task 2 = Tribute Page 
   - Github Repository Code - [Code](https://github.com/mridul0703/OIBSIP-Level-2/tree/main/OIBSIP%20Level-2%20Task-2)
