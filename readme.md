@@ -10,7 +10,7 @@
 
 - Task 2 = Tribute Page 
   - Github Repository Code - [Code](https://github.com/mridul0703/OIBSIP-Level-2/tree/main/OIBSIP%20Level-2%20Task-2)
-  - Live link - [Link](https://oibsip-level-2-cs5c.vercel.app/)
+  - Live link - [Link](https://oibsip-tribute.vercel.app/)
  
 - Task 3 = Temprature Convertor
   - Github Repository Code - [Code]()
